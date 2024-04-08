@@ -3,7 +3,6 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include <cstdlib>
-#include <stack>
 #include <ctime>
 
 #define NUM_STUDENTS 10
@@ -87,11 +86,12 @@ int main() {
         pthread_create(&student_threads[i], nullptr, student, (void *)&student_ids[i]); // Create student threads
     }
 
-    pthread_join(ta_thread, nullptr); // Join TA thread
+
     for (auto & student_thread : student_threads) {
         pthread_join(student_thread, nullptr); // Join student threads
     }
 
+    pthread_join(ta_thread, nullptr); // Join TA thread
     sem_close(sem_seats); // Close semaphore for seats
     sem_unlink("/seats_semaphore"); // Unlink semaphore for seats
     pthread_mutex_destroy(&mutex); // Destroy mutex
